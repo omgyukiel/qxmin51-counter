@@ -17,23 +17,23 @@ void delay(unsigned int i)
 		for (j = 255; j > 0; j--);
 }
 
-// reverses bits
-// source: https://stackoverflow.com/a/2602885
-unsigned char reverse(unsigned char b) {
-   b = (b & 0xF0) >> 4 | (b & 0x0F) << 4;
-   b = (b & 0xCC) >> 2 | (b & 0x33) << 2;
-   b = (b & 0xAA) >> 1 | (b & 0x55) << 1;
-   return b;
-}
+// // reverses bits
+// // source: https://stackoverflow.com/a/2602885
+// unsigned char reverse(unsigned char b) {
+//    b = (b & 0xF0) >> 4 | (b & 0x0F) << 4;
+//    b = (b & 0xCC) >> 2 | (b & 0x33) << 2;
+//    b = (b & 0xAA) >> 1 | (b & 0x55) << 1;
+//    return b;
+// }
 
 void main(void)
 {
-    
+
     // FF all LEDs OFF
     // 00 all LEDS ON
     for (int i = 0; i <255 ; i--) {
         // d = i;
-        P1 = reverse(i); 
+        P1 = i; 
         delay(300);
     }
     

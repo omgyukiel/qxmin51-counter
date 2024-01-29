@@ -18,26 +18,26 @@ void delay(unsigned int i)
 		for (j = 255; j > 0; j--);
 }
 
-// reverses bits
-// source: https://stackoverflow.com/a/2602885
-unsigned char reverse(unsigned char b) {
-   b = (b & 0xF0) >> 4 | (b & 0x0F) << 4;
-   b = (b & 0xCC) >> 2 | (b & 0x33) << 2;
-   b = (b & 0xAA) >> 1 | (b & 0x55) << 1;
-   return b;
-}
+// // reverses bits
+// // source: https://stackoverflow.com/a/2602885
+// unsigned char reverse(unsigned char b) {
+//    b = (b & 0xF0) >> 4 | (b & 0x0F) << 4;
+//    b = (b & 0xCC) >> 2 | (b & 0x33) << 2;
+//    b = (b & 0xAA) >> 1 | (b & 0x55) << 1;
+//    return b;
+// }
 
 void main(void)
 {
     while(1) {
-        // 3 = 00111111 on LEDS; take inverse = 11000000 on LEDS, then reverse for 00000011
-        // left to right on the cylon, then right to left on the next loops
+        // 3 = 00111111 on LEDS; take inverse = 11000000 on LEDS
+        // right to left on the cylon, then  left to righton the next loops
         for (int i = 0; i < 6; i++) {
-            P1 = reverse(~ (3<<i) );
+            P1 = ~ (3<<i) ;
             delay(300);
         }
         for (int i = 0; i < 6; i++) {
-            P1 = reverse(~ (192>>i) );
+            P1 = ~ (192>>i) ;
             delay(300);
         }
     }
