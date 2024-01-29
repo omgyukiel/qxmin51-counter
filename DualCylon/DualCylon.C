@@ -4,7 +4,7 @@
     The STC89 uses an MCS-51(8051) series instruction set standard
 
     This program will flash the LED's 1-8 on the QX-mini to create a 
-    cylon pattern.
+    dual cylon pattern.
 */
 
 // source: https://github.com/retiredfeline/QX-mini51-SDCC
@@ -20,14 +20,8 @@ void delay(unsigned int i)
 void main(void)
 {
     while(1) {
-        // 3 = 00111111 on LEDS; take inverse = 11000000 on LEDS
-        // right to left on the cylon, then  left to righton the next loops
         for (int i = 0; i < 6; i++) {
-            P1 = ~ (3<<i) ;
-            delay(300);
-        }
-        for (int i = 0; i < 6; i++) {
-            P1 = ~ (192>>i) ;
+            P1 = ~(3<<i | 192>>i);
             delay(300);
         }
     }
