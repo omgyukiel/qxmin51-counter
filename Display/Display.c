@@ -18,7 +18,7 @@ void delay(unsigned int i)
 		for (j = 255; j > 0; j--);
 }
 
-
+// displays decimal 0-9999
 void display(int v)
 {   
     // if (v > 9999) {
@@ -60,7 +60,9 @@ void main(void)
         if (K3 == 0) {
             delay(5);
             if (K3 == 0) {
-                // while(!K3);
+                while(!K3) {
+                    display(v);
+                }
                 v++;
                 if (v > 9999) {
                     v = 0;
@@ -70,7 +72,9 @@ void main(void)
         if (K4 == 0) {
             delay(5);
             if (K4 == 0) {
-                // while(!K4);
+                while(!K4) {
+                    display(v);
+                }
                 v--;
                 if (v < 0) {
                     v = 9999;
