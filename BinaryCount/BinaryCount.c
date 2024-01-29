@@ -31,10 +31,10 @@ void main(void)
 
     // FF all LEDs OFF
     // 00 all LEDS ON
-    for (int i = 0; i <255 ; i--) {
+    for (int i = 0; i <255 ; i++) {
         // d = i;
-        P1 = i; 
-        delay(300);
+        P1 = ~i; 
+        delay(100);
     }
     
     for (int i = 0; i < 5; i++) {
