@@ -49,12 +49,6 @@ void display(int v)
 void main(void)
 {
     int v = 0;
-	TMOD = 0x02;
-	TH0 = 0x06;
-	TL0 = 0x06;
-	TR0 = 1;
-	ET0 = 1;
-	EA = 1;
 
 	while (1) {
         display(4321);
