@@ -1,10 +1,11 @@
 #include <8051.h>
+#include <stdbool.h>
 
 /*  This program interfaces with the QX-mini51 STC89C52 MCU
     The STC89 uses an MCS-51(8051) series instruction set standard
 
     This program will flash the LED's 1-8 on the QX-mini to create a 
-    binary counting pattern counting from 0-255.
+    cylon pattern.
 */
 
 // source: https://github.com/retiredfeline/QX-mini51-SDCC
@@ -28,20 +29,16 @@ unsigned char reverse(unsigned char b) {
 
 void main(void)
 {
-    
-    // FF all LEDs OFF
-    // 00 all LEDS ON
-    for (int i = 0; i <255 ; i--) {
-        // d = i;
-        P1 = reverse(i); 
-        delay(300);
+    while(1) {
+        // 3 = 00111111 on LEDS; take inverse = 11000000 on LEDS, then reverse for 00000011
+        // left to right on the cylon, then right to left on the next loops
+        for (int i = 0; i < 6; i++) {
+            P1 = reverse(~ (3<<i) );
+            delay(300);
+        }
+        for (int i = 0; i < 6; i++) {
+            P1 = reverse(~ (192>>i) );
+            delay(300);
+        }
     }
-    
-    for (int i = 0; i < 5; i++) {
-        P1 = 0x00; // Turn ON all LED's connected to Port1
-        delay(300);
-        P1 = 0xFF; // Turn OFF all LED's connected to Port1
-        delay(300);
-    }
-
 }
