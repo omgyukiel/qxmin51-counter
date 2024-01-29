@@ -17,10 +17,33 @@ void delay(unsigned int i)
 		for (j = 255; j > 0; j--);
 }
 
+// reverses bits
+// source: https://stackoverflow.com/a/2602885
+unsigned char reverse(unsigned char b) {
+   b = (b & 0xF0) >> 4 | (b & 0x0F) << 4;
+   b = (b & 0xCC) >> 2 | (b & 0x33) << 2;
+   b = (b & 0xAA) >> 1 | (b & 0x55) << 1;
+   return b;
+}
+
 void main(void)
 {
-	P1 = 0x00;
-	delay(600);
-	P1 = 0xff;
-	delay(600);
+    // FF all LEDs OFF
+    // 00 all LEDS ON
+    // int d;
+        for (int i = 0; i <255 ; i--) {
+            // d = i;
+            P1 = reverse(i); 
+            delay(300);
+            // P1 = ~i;
+            // delay(800);
+        }
+        
+        for (int i = 0; i < 5; i++) {
+         P1 = 0x00; // Turn ON all LED's connected to Port1
+         delay(300);
+         P1 = 0xFF; // Turn OFF all LED's connected to Port1
+         delay(300);
+        }
+
 }
