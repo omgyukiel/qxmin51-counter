@@ -1,0 +1,1 @@
+Using sdcc: sdcc stcboot.c i2c.rel lcd_1602.rel pcf.rel && stcgal -P stc89 stcboot.ihx
