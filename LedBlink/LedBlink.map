@@ -165,7 +165,6 @@ Area                                    Addr        Size        Decimal Bytes (A
      000000AA  _EX1                               LedBlink
      000000AB  _ET1                               LedBlink
      000000AC  _ES                                LedBlink
-     000000AD  _ET2                               LedBlink
      000000AF  _EA                                LedBlink
      000000B0  _P3                                LedBlink
      000000B0  _P3_0                              LedBlink
@@ -190,37 +189,6 @@ Area                                    Addr        Size        Decimal Bytes (A
      000000BA  _PX1                               LedBlink
      000000BB  _PT1                               LedBlink
      000000BC  _PS                                LedBlink
-     000000BD  _PT2                               LedBlink
-     000000C8  _CP_RL2                            LedBlink
-     000000C8  _T2CON                             LedBlink
-     000000C8  _T2CON_0                           LedBlink
-     000000C9  _C_T2                              LedBlink
-     000000C9  _T2CON_1                           LedBlink
-     000000CA  _RCAP2L                            LedBlink
-     000000CA  _T2CON_2                           LedBlink
-     000000CA  _TR2                               LedBlink
-     000000CB  _EXEN2                             LedBlink
-     000000CB  _RCAP2H                            LedBlink
-     000000CB  _T2CON_3                           LedBlink
-     000000CC  _T2CON_4                           LedBlink
-ASxxxx Linker V03.00/V05.40 + sdld,  page 5.
-Hexadecimal  [32-Bits]
-
-Area                                    Addr        Size        Decimal Bytes (Attributes)
---------------------------------        ----        ----        ------- ----- ------------
-.  .ABS.                            00000000    00000000 =           0. bytes (ABS,CON)
-
-      Value  Global                              Global Defined In Module
-      -----  --------------------------------   ------------------------
-     000000CC  _TCLK                              LedBlink
-     000000CC  _TL2                               LedBlink
-     000000CD  _RCLK                              LedBlink
-     000000CD  _T2CON_5                           LedBlink
-     000000CD  _TH2                               LedBlink
-     000000CE  _EXF2                              LedBlink
-     000000CE  _T2CON_6                           LedBlink
-     000000CF  _T2CON_7                           LedBlink
-     000000CF  _TF2                               LedBlink
      000000D0  _P                                 LedBlink
      000000D0  _PSW                               LedBlink
      000000D1  _F1                                LedBlink
@@ -233,7 +201,7 @@ Area                                    Addr        Size        Decimal Bytes (A
      000000E0  _ACC                               LedBlink
      000000F0  _B                                 LedBlink
 
-ASxxxx Linker V03.00/V05.40 + sdld,  page 6.
+ASxxxx Linker V03.00/V05.40 + sdld,  page 5.
 Hexadecimal  [32-Bits]
 
 Area                                    Addr        Size        Decimal Bytes (Attributes)
@@ -242,7 +210,7 @@ REG_BANK_0                          00000000    00000008 =           8. bytes (R
 
       Value  Global                              Global Defined In Module
       -----  --------------------------------   ------------------------
-ASxxxx Linker V03.00/V05.40 + sdld,  page 7.
+ASxxxx Linker V03.00/V05.40 + sdld,  page 6.
 Hexadecimal  [32-Bits]
 
 Area                                    Addr        Size        Decimal Bytes (Attributes)
@@ -251,7 +219,7 @@ DSEG                                00000000    00000080 =         128. bytes (R
 
       Value  Global                              Global Defined In Module
       -----  --------------------------------   ------------------------
-ASxxxx Linker V03.00/V05.40 + sdld,  page 8.
+ASxxxx Linker V03.00/V05.40 + sdld,  page 7.
 Hexadecimal  [32-Bits]
 
 Area                                    Addr        Size        Decimal Bytes (Attributes)
@@ -262,7 +230,7 @@ SSEG                                00000008    000000F8 =         248. bytes (R
       -----  --------------------------------   ------------------------
      00000008  __start__stack                     LedBlink
 
-ASxxxx Linker V03.00/V05.40 + sdld,  page 9.
+ASxxxx Linker V03.00/V05.40 + sdld,  page 8.
 Hexadecimal  [32-Bits]
 
 Area                                    Addr        Size        Decimal Bytes (Attributes)
@@ -273,7 +241,7 @@ HOME                                00000000    00000006 =           6. bytes (R
       -----  --------------------------------   ------------------------
 C:   00000003  __sdcc_program_startup             LedBlink
 
-ASxxxx Linker V03.00/V05.40 + sdld,  page 10.
+ASxxxx Linker V03.00/V05.40 + sdld,  page 9.
 Hexadecimal  [32-Bits]
 
 Area                                    Addr        Size        Decimal Bytes (Attributes)
@@ -284,7 +252,7 @@ GSINIT0                             00000006    00000003 =           3. bytes (R
       -----  --------------------------------   ------------------------
 C:   00000006  __sdcc_gsinit_startup              
 
-ASxxxx Linker V03.00/V05.40 + sdld,  page 11.
+ASxxxx Linker V03.00/V05.40 + sdld,  page 10.
 Hexadecimal  [32-Bits]
 
 Area                                    Addr        Size        Decimal Bytes (Attributes)
@@ -293,7 +261,7 @@ GSINIT2                             00000009    0000000A =          10. bytes (R
 
       Value  Global                              Global Defined In Module
       -----  --------------------------------   ------------------------
-ASxxxx Linker V03.00/V05.40 + sdld,  page 12.
+ASxxxx Linker V03.00/V05.40 + sdld,  page 11.
 Hexadecimal  [32-Bits]
 
 Area                                    Addr        Size        Decimal Bytes (Attributes)
@@ -304,7 +272,7 @@ GSINIT3                             00000013    00000022 =          34. bytes (R
       -----  --------------------------------   ------------------------
 C:   00000013  __mcs51_genXINIT                   
 
-ASxxxx Linker V03.00/V05.40 + sdld,  page 13.
+ASxxxx Linker V03.00/V05.40 + sdld,  page 12.
 Hexadecimal  [32-Bits]
 
 Area                                    Addr        Size        Decimal Bytes (Attributes)
@@ -316,7 +284,7 @@ GSINIT4                             00000035    0000002A =          42. bytes (R
 C:   00000035  __mcs51_genRAMCLEAR                
 C:   0000003B  __mcs51_genXRAMCLEAR               
 
-ASxxxx Linker V03.00/V05.40 + sdld,  page 14.
+ASxxxx Linker V03.00/V05.40 + sdld,  page 13.
 Hexadecimal  [32-Bits]
 
 Area                                    Addr        Size        Decimal Bytes (Attributes)
@@ -325,7 +293,7 @@ GSFINAL                             0000005F    00000003 =           3. bytes (R
 
       Value  Global                              Global Defined In Module
       -----  --------------------------------   ------------------------
-ASxxxx Linker V03.00/V05.40 + sdld,  page 15.
+ASxxxx Linker V03.00/V05.40 + sdld,  page 14.
 Hexadecimal  [32-Bits]
 
 Area                                    Addr        Size        Decimal Bytes (Attributes)
@@ -337,7 +305,7 @@ CSEG                                00000062    00000034 =          52. bytes (R
 C:   00000062  _main                              LedBlink
 C:   00000070  _delay                             LedBlink
 C:   00000092  ___sdcc_external_startup           _startup
-ASxxxx Linker V03.00/V05.40 + sdld,  page 16.
+ASxxxx Linker V03.00/V05.40 + sdld,  page 15.
 
 Files Linked                              [ module(s) ]
 
@@ -359,7 +327,7 @@ C:\Program Files (x86)\SDCC\bin\..\lib\small/mcs51.lib
 C:\Program Files (x86)\SDCC\bin\..\lib\small/libsdcc.lib
                                           [ _startup.rel ]
 
-ASxxxx Linker V03.00/V05.40 + sdld,  page 17.
+ASxxxx Linker V03.00/V05.40 + sdld,  page 16.
 
 User Base Address Definitions
 

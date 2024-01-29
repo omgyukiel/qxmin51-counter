@@ -9,24 +9,6 @@
 ; Public variables in this module
 ;--------------------------------------------------------
 	.globl _main
-	.globl _TF2
-	.globl _EXF2
-	.globl _RCLK
-	.globl _TCLK
-	.globl _EXEN2
-	.globl _TR2
-	.globl _C_T2
-	.globl _CP_RL2
-	.globl _T2CON_7
-	.globl _T2CON_6
-	.globl _T2CON_5
-	.globl _T2CON_4
-	.globl _T2CON_3
-	.globl _T2CON_2
-	.globl _T2CON_1
-	.globl _T2CON_0
-	.globl _PT2
-	.globl _ET2
 	.globl _CY
 	.globl _AC
 	.globl _F0
@@ -102,11 +84,6 @@
 	.globl _P0_2
 	.globl _P0_1
 	.globl _P0_0
-	.globl _TH2
-	.globl _TL2
-	.globl _RCAP2H
-	.globl _RCAP2L
-	.globl _T2CON
 	.globl _B
 	.globl _ACC
 	.globl _PSW
@@ -155,11 +132,6 @@ _IP	=	0x00b8
 _PSW	=	0x00d0
 _ACC	=	0x00e0
 _B	=	0x00f0
-_T2CON	=	0x00c8
-_RCAP2L	=	0x00ca
-_RCAP2H	=	0x00cb
-_TL2	=	0x00cc
-_TH2	=	0x00cd
 ;--------------------------------------------------------
 ; special function bits
 ;--------------------------------------------------------
@@ -240,24 +212,6 @@ _RS1	=	0x00d4
 _F0	=	0x00d5
 _AC	=	0x00d6
 _CY	=	0x00d7
-_ET2	=	0x00ad
-_PT2	=	0x00bd
-_T2CON_0	=	0x00c8
-_T2CON_1	=	0x00c9
-_T2CON_2	=	0x00ca
-_T2CON_3	=	0x00cb
-_T2CON_4	=	0x00cc
-_T2CON_5	=	0x00cd
-_T2CON_6	=	0x00ce
-_T2CON_7	=	0x00cf
-_CP_RL2	=	0x00c8
-_C_T2	=	0x00c9
-_TR2	=	0x00ca
-_EXEN2	=	0x00cb
-_TCLK	=	0x00cc
-_RCLK	=	0x00cd
-_EXF2	=	0x00ce
-_TF2	=	0x00cf
 ;--------------------------------------------------------
 ; overlayable register banks
 ;--------------------------------------------------------
