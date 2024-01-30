@@ -136,10 +136,10 @@ void main(void)
 
             if (left) {
                 P1 = ~ (3<<count) ;
-                delay(300);
+                delay(100);
             } else {
                 P1 = ~ (192>>count) ;
-                delay(300);
+                delay(100);
             }
             count++;
         }
@@ -150,7 +150,7 @@ void main(void)
             // for (int i = 0; i < 6; i++) {
             P1 = ~(3<<count | 192>>count);
             count++;
-            delay(200);
+            delay(100);
             // }
         }
 	}
