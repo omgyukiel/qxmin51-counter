@@ -1,6 +1,9 @@
-#define SDA P1_0
-#define SCL P1_1
-#define INT P1_2
+#include <8051.h>
+
+#define SDA P0_0
+#define SCL P0_1
+#define INT P0_2
+#define DBG P0_3
 
 void main(void) 
 {
@@ -9,5 +12,10 @@ void main(void)
     //TODO: read SDA
     //TODO: read a button press from SDA
     //TODO: read button press then turn on LED
+    while(1) {
+        DBG = 1;
+    }
+
+
 
 }

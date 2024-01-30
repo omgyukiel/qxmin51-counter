@@ -73,11 +73,12 @@ void main(void)
     int count = 0; // counter for LEDs
     bool left = true;
 
-    for (int j = 70; j > 0; j--) {
-        P3_6 ^= 1;	
-        delay(j);
-        delay(5);
-    }
+    // for (int j = 70; j > 0; j--) {
+    //     P3_6 ^= 1;	
+    //     delay(j);
+    //     delay(5);
+    // }
+    
     // for (int j = 20; j > 0; j--) {
     //     for (int i = 50; i>0; i--) {
     //         P3_6 ^= 1;
