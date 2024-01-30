@@ -93,10 +93,10 @@ void main(void)
             if (K3 == 0) {
                 delay(5);
                 if (K3 == 0) {
+                    v++;
                     while(!K3) {  // Display current value if button is held
                         display_seg(v);
                     }
-                    v++;
                     if (v > 9999) {
                         v = 0;
                     }
@@ -105,10 +105,10 @@ void main(void)
             if (K4 == 0) {
                 delay(5);
                 if (K4 == 0) {
+                    v--;
                     while(!K4) {
                         display_seg(v);
                     }
-                    v--;
                     if (v < 0) {
                         v = 9999;
                     }
