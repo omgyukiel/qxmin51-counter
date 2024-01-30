@@ -4,9 +4,9 @@
     This program combines the BinaryCount, Cyclon, Dual Cyclon, and
     Display programs into one feature set. 
 */
-
 #include <8051.h>
-#include <stdio.h>
+#include <stdbool.h>
+
 
 // 0 bit means that segment is on
 // dictionary for digits 0-9 on the 7-segment display
@@ -20,12 +20,11 @@ __code unsigned char table[] = { 0xc0, 0xf9, 0xa4, 0xb0, 0x99, 0x92, 0x82,
 #define	K2	P3_4
 #define	K1	P3_5
 
-#define OFF 0;
+#define SEG 0
 #define COUNT 1
 #define CYCLON 2
 #define DUAL 3
 
-int count = 0; // counter for LEDs
 
 // source: https://github.com/retiredfeline/QX-mini51-SDCC
 // program a delay between operations
@@ -38,7 +37,7 @@ void delay(unsigned int i)
 }
 
 // displays decimal 0-9999
-void display_seg(int v, int mode)
+void display_seg(int v)
 {   
 
     // P2_0 - P2-3 are 1000s, 100s, 10s, 1s respectively
@@ -63,118 +62,96 @@ void display_seg(int v, int mode)
 	delay(5);
 	P2_3 = 1;
 
-    // if (mode == OFF) {
-    //     P1 = 0;
-    // }
-    if (mode == COUNT) {
+}
+
+void main(void)
+{
+    int v = 0;
+    int mode = SEG;
+    int count = 0; // counter for LEDs
+    bool left = true;
+
+
+	while (1) {
+        // toggles between LED features
+        if (K1 == 0) {
+            delay(5);
+            while(!K1) {
+            }
+            mode++;
+            if (mode == 4) {
+                mode = 0;
+            }
+            v = 0;
+            count = 0;
+            P1 = 0xFF;
+        }
+        if (mode == SEG) {
+            int t = 0; // var for button timer
+            // 0 = button press
+            // K3-K4 increments/decrements counter on 7-segment display
+            if (K3 == 0) {
+                delay(5);
+                if (K3 == 0) {
+                    while(!K3) {  // Display current value if button is held
+                        display_seg(v);
+                    }
+                    v++;
+                    if (v > 9999) {
+                        v = 0;
+                    }
+                }
+            }
+            if (K4 == 0) {
+                delay(5);
+                if (K4 == 0) {
+                    while(!K4) {
+                        display_seg(v);
+                    }
+                    v--;
+                    if (v < 0) {
+                        v = 9999;
+                    }
+                }
+            }
+            display_seg(v);
+        }
+
+        if (mode == COUNT) {
 
             P1 = ~count;
             count++;
             if (count == 255) {
                 count = 0;
             }
-            delay(5);
-    }
-    if (mode == CYCLON) {
-        // 3 = 00111111 on LEDS; take inverse = 11000000 on LEDS
-        // right to left on the cylon, then  left to right on the next loops
-        
-        for (int i = 0; i < 6; i++) {
-            P1 = ~ (3<<i) ;
-            delay(5);
+            delay(100);
         }
-        for (int i = 0; i < 6; i++) {
-            P1 = ~ (192>>i) ;
-            delay(5);
-        }
-    }
-    if (mode == DUAL) {
-        if (count == 6) {
-            count = 0;
-        }
-        P1 = ~(3<<count | 192>>count);
-        delay(200);
-    }
-
-}
-
-void main(void)
-{
-    int v = 0;
-    int mode = OFF;
-
-	while (1) {
-        int t = 0; // var for button timer
-        // 0 = button press
-        // K3-K4 increments/decrements counter on 7-segment display
-        if (K3 == 0) {
-            delay(5);
-            if (K3 == 0) {
-                while(!K3) {  // Display current value if button is held
-                    display_seg(v, mode);
-                }
-                v++;
-                if (v > 9999) {
-                    v = 0;
-                }
+        if (mode == CYCLON) {
+            // 3 = 00111111 on LEDS; take inverse = 11000000 on LEDS
+            // right to left on the cylon, then  left to right on the next loops
+            if (count == 6) {
+                left = !left;
+                count = 0;
             }
-        }
-        if (K4 == 0) {
-            delay(5);
-            if (K4 == 0) {
-                while(!K4) {
-                    display_seg(v, mode);
-                }
-                v--;
-                if (v < 0) {
-                    v = 9999;
-                }
+
+            if (left) {
+                P1 = ~ (3<<count) ;
+                delay(300);
+            } else {
+                P1 = ~ (192>>count) ;
+                delay(300);
             }
+            count++;
         }
-        display_seg(v, mode);
-
-        // if (mode == COUNT) {
-
-        //     P1 = ~count;
-        //     count++;
-        //     if (count == 255) {
-        //         count = 0;
-        //     }
-        //     display_seg(v);
-        //     delay(100);
-        // }
-        // if (mode == CYCLON) {
-        //     // 3 = 00111111 on LEDS; take inverse = 11000000 on LEDS
-        //     // right to left on the cylon, then  left to right on the next loops
-        //     for (int i = 0; i < 6; i++) {
-        //         P1 = ~ (3<<i) ;
-        //         delay(300);
-        //     }
-        //     for (int i = 0; i < 6; i++) {
-        //         P1 = ~ (192>>i) ;
-        //         delay(300);
-        //     }
-        // }
-        // if (mode == DUAL) {
-        //     if (count == 6) {
-        //         count = 0;
-        //     }
-        //     P1 = ~(3<<count | 192>>count);
-        //     delay(200);
-        // }
-        // toggles between LED features
-        if (K1 == 0) {
-            delay(5);
-            while(!K1) {
-                display_seg(v, mode);
+        if (mode == DUAL) {
+            if (count == 6) {
+                count = 0;
             }
-            mode++;
-            if (mode == 4) {
-                mode = 0;
-            }
-            count = 0;
+            // for (int i = 0; i < 6; i++) {
+            P1 = ~(3<<count | 192>>count);
+            count++;
+            delay(200);
+            // }
         }
-
-
 	}
 }
