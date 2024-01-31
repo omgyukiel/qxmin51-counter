@@ -21,28 +21,29 @@ void cmdout(unsigned char cmd)
         else {
             SDA = 0;
         }
+        delay(10);
         SCL = 1;
         cmd = cmd << 1;  // clock data into sda
         SCL = 0;
     }
 }
 
-void cmdin(void) 
-{
-    for (unsigned char i = 0; i < 8; i++) {
-        SCL = 0;
-        SCL = 1;
-        delay(1);
-        if (SDA) { // read port
-            P1 = ~i; // 1;
-        }
-        else {
-            P1 = 0xFF;
-        }
-        delay(10000);
-        SCL = 0;
-    }
-}
+// void cmdin(void) 
+// {
+//     for (int i = 7; i >= 0; i--) {
+//         SCL = 0;
+//         SCL = 1;
+//         delay(1);
+//         if (SDA) { // read port
+//             P1 = ~i; // 1;
+//         }
+//         else {
+//             P1 = 0xFF;
+//         }
+//         delay(10);
+//         SCL = 0;
+//     }
+// }
 
 
 void start(void) {
@@ -68,29 +69,55 @@ void main(void)
 	// TI = 1;			// enable serial port interrupt
 
 
+    //TODO: write to SDA 
     //TODO: write to SDA and turn on LED
-    //TODO: read a button press from SDA
+
     //TODO: read button press then turn on LED
     while(1) {
-        // DBG = 1;
-        delay(10000);
+
+
         start();
-        cmdout(0x41); // read address 000
+        cmdout(0x41); // read device at 000
         // ACK from slave
         SCL = 1;
         delay(1);
         if (SDA) {  // NACK
-            P1 = 0xFF;
-            delay(10);
+            // P1 = 0xFF;
+            // delay(10);
             // stop();
         } else { // SDA low is ACK
-            P1 = 0x20;
+            // P1 = 0x00;
             // delay(10);
             // stop();
         }
         SCL = 0;
-
-        cmdin(); // p7-p0
+        // holds binary representation of button presses
+        unsigned char pos = 0;
+        for (int i = 7; i >= 0; i--) {
+            SCL = 0;
+            SCL = 1;
+            delay(1);
+            if (SDA) { // read port
+                // P1 = ~i; // 1;
+            }
+            else {
+                pos |= (1<<i); // bit pos mask
+                P1 = ~pos;
+                // pos[i] = 1;
+                delay(100);
+                P1 = 0xFF;
+                // if (i == 4) {
+                //     P1 = 0x00;
+                //     pos[i] = 1;
+                //     delay(100);
+                //     P1 = 0xFF;
+                // }
+                
+            }
+            delay(10);
+            // SCL = 0;
+        }
+        // cmdin(); // p7-p0
 
         // ACK from master
         SDA = 1;
@@ -99,67 +126,88 @@ void main(void)
         delay(1);
         SCL = 0;
 
-        cmdin(); // p17-p10
-        // ACK from master
-        SDA = 1;  
-        delay(1);
+        stop(); // only read buttons
+
+        // cmdin(); // p17-p10
+        // for (int i = 7; i >= 0; i--) {
+        //     SCL = 0;
+        //     SCL = 1;
+        //     delay(1);
+        //     if (SDA) { // read port
+        //         // P1 = ~i; // 1;
+        //     }
+        //     else {
+        //         P1 = 0x00;
+        //     }
+        //     delay(10);
+        //     // SCL = 0;
+        // }
+        // // ACK from master
+        // SDA = 1;  
+        // delay(1);
+        // SCL = 1;
+        // delay(1);
+        // SCL = 0;
+
+
+        // stop();
+
+// write all
+        start();
+        cmdout(0x40); // write 
+
+        // ACK from slave
         SCL = 1;
         delay(1);
+        if (SDA) {  // NACK
+            P1 = 0x00;
+            delay(100);
+            P1 = 0xFF;
+            // stop();
+        } else { // SDA low is ACK
+            P1 = 0xFF;
+            delay(100);
+            // stop();
+        }
+        SCL = 0;
+
+        cmdout(0xFF); // write to ports
+
+        // ACK from slave
+        SCL = 1;
+        delay(1);
+        if (SDA) {  // NACK
+            P1 = 0X00;
+            delay(100);
+            P1 = 0xFF;
+            delay(100);
+            // stop();
+        } else { // SDA low is ACK
+            P1 = 0xFF;
+            delay(100);
+            // stop();
+        }
+        SCL = 0;
+
+        // cmdout(~bitpos);
+        cmdout(~pos); // p10-p17
+        // ACK from slave
+        SCL = 1;
+        delay(1);
+        if (SDA) {  // NACK
+            // P1 = 0x00;
+            delay(10);
+            // stop();
+        } else { // SDA low is ACK
+            P1 = 0xFF;
+            delay(100);
+            // stop();
+        }
         SCL = 0;
 
 
         stop();
-
-// // write all
-//         cmdout(0x40); // write 
-//         // ACK from slave
-//         SCL = 1;
-//         delay(1);
-//         if (SDA) {  // NACK
-//             P1 = 0xFF;
-//             delay(10);
-//             // stop();
-//         } else { // SDA low is ACK
-//             P1 = 0xFF;
-//             delay(100);
-//             // stop();
-//         }
-//         SCL = 0;
-
-//         cmdout(0x40); // p7-p0 1s on p6
-
-//         // ACK from slave
-//         SCL = 1;
-//         delay(1);
-//         if (SDA) {  // NACK
-//             P1 = 0xFF;
-//             delay(10);
-//             // stop();
-//         } else { // SDA low is ACK
-//             P1 = 0x00;
-//             delay(100);
-//             // stop();
-//         }
-//         SCL = 0;
-
-//         cmdout(0x00); // p10-p17
-//         // ACK from slave
-//         SCL = 1;
-//         delay(1);
-//         if (SDA) {  // NACK
-//             P1 = 0xFF;
-//             delay(10);
-//             // stop();
-//         } else { // SDA low is ACK
-//             P1 = 0x00;
-//             delay(100);
-//             // stop();
-//         }
-//         SCL = 0;
-
-
-//         stop();
-//     }
+    }
 
 
 
