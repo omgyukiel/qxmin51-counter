@@ -61,6 +61,7 @@ void stop(void) {
     SCL = 1;
     SDA = 1;
 }
+
 void main(void) 
 {  
     //  TMOD |= 0x20;		
@@ -68,11 +69,6 @@ void main(void)
 	// TR1 = 1;
 	// TI = 1;			// enable serial port interrupt
 
-
-    //TODO: write to SDA 
-    //TODO: write to SDA and turn on LED
-
-    //TODO: read button press then turn on LED
     while(1) {
 
 

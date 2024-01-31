@@ -3,6 +3,12 @@
 
     This program combines the BinaryCount, Cyclon, Dual Cyclon, and
     Display programs into one feature set. 
+
+    This program additonally multiplex 4 push buttons to light up LEDs on press.
+    The buttons and leds are hooked up to an active-low i2c (PCF8575TS).
+    Whent he button is pressed, a low signal is set on the i2c's port, and the 
+    MCU (the QX-mini) will set the respective led's port level to low. The buttons
+    activate the respective ports on the next byte within the i2c. EX. P0 == P10
 */
 #include <8051.h>
 #include <stdbool.h>
@@ -26,17 +32,29 @@ __code unsigned char table[] = { 0xc0, 0xf9, 0xa4, 0xb0, 0x99, 0x92, 0x82,
 #define COUNT 1
 #define CYCLON 2
 #define DUAL 3
+#define SDA P0_0
+#define SCL P0_1
+#define INT P0_2
+#define DBG P0_3
+#define MSK 0x80
 
 
-// source: https://github.com/retiredfeline/QX-mini51-SDCC
-// program a delay between operations
-void delay(unsigned int i)
+// // source: https://github.com/retiredfeline/QX-mini51-SDCC
+// // program a delay between operations
+// void delay(unsigned int i)
+// {
+// 	unsigned char j;
+
+// 	for (; i > 0; i--)
+// 		for (j = 255; j > 0; j--);
+// }
+
+// // source: https://github.com/retiredfeline/QX-mini51-SDCC
+// delay for 18  µs
+void delay(unsigned int t)
 {
-	unsigned char j;
-
-	for (; i > 0; i--)
-		for (j = 255; j > 0; j--);
-}
+	while (--t); // roughly i * 8 + 10 µs
+}	
 
 // displays decimal 0-9999
 void display_seg(int v)
@@ -66,6 +84,41 @@ void display_seg(int v)
 
 }
 
+// start condition for i2c op
+void start(void) {
+    SDA = 1;
+    delay(1);
+    SCL = 1;
+    SDA = 0;
+    delay(1);
+    SCL = 0;
+}
+
+// stop condition for i2c op
+void stop(void) {
+    SDA = 0;
+    delay(1);
+    SCL = 1;
+    SDA = 1;
+}
+
+// sends byte instruction to i2c
+void cmdout(unsigned char cmd) 
+{
+    for (unsigned char i = 0; i < 8; i++) {
+        if (cmd & MSK) {
+            SDA = 1;
+        }
+        else {
+            SDA = 0;
+        }
+        delay(10);
+        SCL = 1;
+        cmd = cmd << 1;  // clock data into sda
+        SCL = 0;
+    }
+}
+
 void main(void)
 {
     int v = 0;
@@ -78,7 +131,7 @@ void main(void)
     //     delay(j);
     //     delay(5);
     // }
-    
+
     // for (int j = 20; j > 0; j--) {
     //     for (int i = 50; i>0; i--) {
     //         P3_6 ^= 1;
@@ -95,6 +148,105 @@ void main(void)
     // }
 
 	while (1) {
+        // holds binary representation of button presses
+        unsigned char pos = 0;
+        // start i2c instruction
+        start();
+        cmdout(0x41); // read device at address 000
+        // ACK from slave
+        SCL = 1;
+        delay(1);
+        if (SDA) {  // NACK
+            // P1 = 0xFF;
+            // delay(10);
+            // stop();
+        } else { // ACK
+            // P1 = 0x00;
+            // delay(10);
+            // stop();
+        }
+        SCL = 0;
+
+        
+        for (int i = 7; i >= 0; i--) {
+            SCL = 0;
+            SCL = 1;
+            delay(1);
+            if (SDA) { // default i2c is active low
+                // P1 = ~i; // 1;
+            }
+            else {
+                pos |= (1<<i); // bit pos mask
+                P1 = ~pos;
+                delay(100);
+                P1 = 0xFF;
+
+            }
+            delay(10);
+        }
+
+        // ACK from master
+        SDA = 1;
+        delay(1);
+        SCL = 1;
+        delay(1);
+        SCL = 0;
+
+        stop(); // only read buttons from p0-p7
+
+        start();
+        cmdout(0x40); // write 
+
+        // ACK from slave
+        SCL = 1;
+        delay(1);
+        if (SDA) {  // NACK
+            P1 = 0x00;
+            delay(100);
+            P1 = 0xFF;
+            // stop();
+        } else { // SDA low is ACK
+            P1 = 0xFF;
+            delay(100);
+            // stop();
+        }
+        SCL = 0;
+
+        cmdout(0xFF); // write to ports
+
+        // ACK from slave
+        SCL = 1;
+        delay(1);
+        if (SDA) {  // NACK
+            P1 = 0X00;
+            delay(100);
+            P1 = 0xFF;
+            delay(100);
+            // stop();
+        } else { // SDA low is ACK
+            P1 = 0xFF;
+            delay(100);
+            // stop();
+        }
+        SCL = 0;
+
+        // cmdout(~bitpos);
+        cmdout(~pos); // p10-p17
+        // ACK from slave
+        SCL = 1;
+        delay(1);
+        if (SDA) {  // NACK
+            // P1 = 0x00;
+            delay(10);
+            // stop();
+        } else { // SDA low is ACK
+            P1 = 0xFF;
+            delay(100);
+            // stop();
+        }
+        SCL = 0;
+        stop();
+
         // toggles between LED features
         if (K1 == 0) {
             delay(5);
