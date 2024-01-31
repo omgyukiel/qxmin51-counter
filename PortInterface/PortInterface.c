@@ -68,52 +68,14 @@ void main(void)
 	// TI = 1;			// enable serial port interrupt
 
 
-    //TODO: write to SDA 
     //TODO: write to SDA and turn on LED
-    //TODO: read SDA
     //TODO: read a button press from SDA
     //TODO: read button press then turn on LED
     while(1) {
         // DBG = 1;
         delay(10000);
         start();
-        // cmdout(0x41); // read address 000
-        // // ACK from slave
-        // SCL = 1;
-        // delay(1);
-        // if (SDA) {  // NACK
-        //     P1 = 0xFF;
-        //     delay(10);
-        //     // stop();
-        // } else { // SDA low is ACK
-        //     P1 = 0x20;
-        //     // delay(10);
-        //     // stop();
-        // }
-        // SCL = 0;
-
-        // cmdin(); // p7-p0
-
-        // // ACK from master
-        // SDA = 1;
-        // delay(1);
-        // SCL = 1;
-        // delay(1);
-        // SCL = 0;
-
-        // cmdin(); // p17-p10
-        // // ACK from master
-        // SDA = 1;  
-        // delay(1);
-        // SCL = 1;
-        // delay(1);
-        // SCL = 0;
-
-
-        // stop();
-
-// write all
-        cmdout(0x40); // read address 000
+        cmdout(0x41); // read address 000
         // ACK from slave
         SCL = 1;
         delay(1);
@@ -122,46 +84,82 @@ void main(void)
             delay(10);
             // stop();
         } else { // SDA low is ACK
-            P1 = 0xFF;
-            delay(100);
+            P1 = 0x20;
+            // delay(10);
             // stop();
         }
         SCL = 0;
 
-        cmdout(0x00); // p7-p0
+        cmdin(); // p7-p0
 
-        // ACK from slave
+        // ACK from master
+        SDA = 1;
+        delay(1);
         SCL = 1;
         delay(1);
-        if (SDA) {  // NACK
-            P1 = 0xFF;
-            delay(10);
-            // stop();
-        } else { // SDA low is ACK
-            P1 = 0x00;
-            delay(100);
-            // stop();
-        }
         SCL = 0;
 
-        cmdout(0xFF); // p10-p17
-        // ACK from slave
+        cmdin(); // p17-p10
+        // ACK from master
+        SDA = 1;  
+        delay(1);
         SCL = 1;
         delay(1);
-        if (SDA) {  // NACK
-            P1 = 0xFF;
-            delay(10);
-            // stop();
-        } else { // SDA low is ACK
-            P1 = 0x00;
-            delay(100);
-            // stop();
-        }
         SCL = 0;
 
 
         stop();
-    }
+
+// // write all
+//         cmdout(0x40); // write 
+//         // ACK from slave
+//         SCL = 1;
+//         delay(1);
+//         if (SDA) {  // NACK
+//             P1 = 0xFF;
+//             delay(10);
+//             // stop();
+//         } else { // SDA low is ACK
+//             P1 = 0xFF;
+//             delay(100);
+//             // stop();
+//         }
+//         SCL = 0;
+
+//         cmdout(0x40); // p7-p0 1s on p6
+
+//         // ACK from slave
+//         SCL = 1;
+//         delay(1);
+//         if (SDA) {  // NACK
+//             P1 = 0xFF;
+//             delay(10);
+//             // stop();
+//         } else { // SDA low is ACK
+//             P1 = 0x00;
+//             delay(100);
+//             // stop();
+//         }
+//         SCL = 0;
+
+//         cmdout(0x00); // p10-p17
+//         // ACK from slave
+//         SCL = 1;
+//         delay(1);
+//         if (SDA) {  // NACK
+//             P1 = 0xFF;
+//             delay(10);
+//             // stop();
+//         } else { // SDA low is ACK
+//             P1 = 0x00;
+//             delay(100);
+//             // stop();
+//         }
+//         SCL = 0;
+
+
+//         stop();
+//     }
 
 
 
