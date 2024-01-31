@@ -39,15 +39,14 @@ __code unsigned char table[] = { 0xc0, 0xf9, 0xa4, 0xb0, 0x99, 0x92, 0x82,
 #define MSK 0x80
 
 
-// // source: https://github.com/retiredfeline/QX-mini51-SDCC
 // // program a delay between operations
-// void delay(unsigned int i)
-// {
-// 	unsigned char j;
+void delay_led(unsigned int i)
+{
+	unsigned char j;
 
-// 	for (; i > 0; i--)
-// 		for (j = 255; j > 0; j--);
-// }
+	for (; i > 0; i--)
+		for (j = 255; j > 0; j--);
+}
 
 // // source: https://github.com/retiredfeline/QX-mini51-SDCC
 // delay for 18  µs
@@ -177,9 +176,9 @@ void main(void)
             }
             else {
                 pos |= (1<<i); // bit pos mask
-                P1 = ~pos;
-                delay(100);
-                P1 = 0xFF;
+                // P1 = ~pos;
+                // delay(100);
+                // P1 = 0xFF;
 
             }
             delay(10);
@@ -201,13 +200,13 @@ void main(void)
         SCL = 1;
         delay(1);
         if (SDA) {  // NACK
-            P1 = 0x00;
-            delay(100);
-            P1 = 0xFF;
+            // P1 = 0x00;
+            // delay(100);
+            // P1 = 0xFF;
             // stop();
         } else { // SDA low is ACK
-            P1 = 0xFF;
-            delay(100);
+            // P1 = 0xFF;
+            // delay(100);
             // stop();
         }
         SCL = 0;
@@ -218,14 +217,14 @@ void main(void)
         SCL = 1;
         delay(1);
         if (SDA) {  // NACK
-            P1 = 0X00;
-            delay(100);
-            P1 = 0xFF;
-            delay(100);
+            // P1 = 0X00;
+            // delay(100);
+            // P1 = 0xFF;
+            // delay(100);
             // stop();
         } else { // SDA low is ACK
-            P1 = 0xFF;
-            delay(100);
+            // P1 = 0xFF;
+            // delay(100);
             // stop();
         }
         SCL = 0;
@@ -237,11 +236,11 @@ void main(void)
         delay(1);
         if (SDA) {  // NACK
             // P1 = 0x00;
-            delay(10);
+            // delay(10);
             // stop();
         } else { // SDA low is ACK
-            P1 = 0xFF;
-            delay(100);
+            // P1 = 0xFF;
+            // delay(100);
             // stop();
         }
         SCL = 0;
@@ -298,7 +297,7 @@ void main(void)
             if (count == 255) {
                 count = 0;
             }
-            delay(100);
+            delay_led(100);
         }
         if (mode == CYCLON) {
             // 3 = 00111111 on LEDS; take inverse = 11000000 on LEDS
@@ -310,10 +309,10 @@ void main(void)
 
             if (left) {
                 P1 = ~ (3<<count) ;
-                delay(100);
+                delay_led(100);
             } else {
                 P1 = ~ (192>>count) ;
-                delay(100);
+                delay_led(100);
             }
             count++;
         }
@@ -324,7 +323,7 @@ void main(void)
             // for (int i = 0; i < 6; i++) {
             P1 = ~(3<<count | 192>>count);
             count++;
-            delay(100);
+            delay_led(100);
             // }
         }
 	}
