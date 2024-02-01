@@ -92,6 +92,7 @@ void delay_led(unsigned int i)
 		for (j = 255; j > 0; j--);
 }
 
+// ack from slave
 void ack(void) {
      // ACK from slave
         SCL = 1;
@@ -113,6 +114,7 @@ void main(void)
 
     
     while(1) {
+
         start();
         cmdout(0x7e); // write 
 
@@ -133,33 +135,10 @@ void main(void)
 
         // lcd_set(0x00);
          // unsigned char cmd = 0x0F;
-        unsigned char cmd = 0b00000000; // lower bytes three bits are 2:e 1: r/w 0:rs
-        for (unsigned char i = 0; i < 8; i++) {
-            if (cmd & 0x80) {
-                SDA = 1;
-            }
-            else {
-                SDA = 0;
-            }
-            delay(10);
-            SCL = 1;
-            cmd = cmd << 1;  // clock data into sda
-            SCL = 0;
-        }
-        SCL = 0;
-         // ACK from slave
-        SCL = 1;
-        delay(100);
-        if (SDA) {  // NACK
-            P1 = 0x00;
-            delay(100);
-            P1 = 0xFF;
-            // stop();
-        } else { // SDA low is ACK
-            P1 = 0xFF;
-            delay(100);
-        }
-        SCL = 0;
+        cmdout(0x00); // lower bytes three bits are 2:e 1: r/w 0:rs
+        ack();
+        delay(10);
+
 
         cmdout(0x38);  // dl = 8, lines = 2
         ack();
@@ -169,10 +148,10 @@ void main(void)
         cmdout(0x0c); // display on
         ack();
 
-        // cmdout(0x00);
-        // ack();
-        // cmdout(0x06);
-        // ack();
+        cmdout(0x00);
+        ack();
+        cmdout(0x06); // cursor direction increments
+        ack();
 
         cmdout(0x00);
         ack();
@@ -185,6 +164,7 @@ void main(void)
         ack();
 
         stop();
+        // delay_led(100000);
 
 }
 
@@ -217,92 +197,5 @@ void main(void)
     //         delay(100);
     //     }
     //     SCL = 0;
-
-    //     cmd = 0b00000000; 
-    //     for (unsigned char i = 0; i < 8; i++) {
-    //         if (cmd & 0x80) {
-    //             SDA = 1;
-    //         }
-    //         else {
-    //             SDA = 0;
-    //         }
-    //         delay(10);
-    //         SCL = 1;
-    //         cmd = cmd << 1;  // clock data into sda
-    //         SCL = 0;
-    //     }
-    //     SCL = 0;
-    //     // ACK from slave
-    //     SCL = 1;
-    //     delay(1);
-    //     if (SDA) {  // NACK
-    //         P1 = 0x00;
-    //         delay(100);
-    //         P1 = 0xFF;
-    //         // stop();
-    //     } else { // SDA low is ACK
-    //         P1 = 0xFF;
-    //         delay(100);
-    //     }
-    //     SCL = 0;
-    // stop();
-        // cmdout(0xFF); // write to ports
-
-        // // ACK from slave
-        // SCL = 1;
-        // delay(1);
-        // if (SDA) {  // NACK
-        //     P1 = 0X00;
-        //     delay(100);
-        //     P1 = 0xFF;
-        //     delay(100);
-        //     // stop();
-        // } else { // SDA low is ACK
-        //     P1 = 0xFF;
-        //     delay(100);
-        // }
-        // SCL = 0;
-
-        // cmdout(0x00); // write to ports
-
-        // // ACK from slave
-        // SCL = 1;
-        // delay(1);
-        // if (SDA) {  // NACK
-        //     P1 = 0X00;
-        //     delay(100);
-        //     P1 = 0xFF;
-        //     delay(100);
-        //     // stop();
-        // } else { // SDA low is ACK
-        //     P1 = 0xFF;
-        //     delay(100);
-        // }
-        // SCL = 0;
-
-     
-        // delay_led(500);
-
-        // cmdout(0xFF);
-        // // ACK from slave
-        // SCL = 1;
-        // delay(1);
-        // if (SDA) {  // NACK
-        //     // P1 = 0x00;
-        //     // delay(10);
-        //     // stop();
-        // } else { // SDA low is ACK
-        //     // P1 = 0xFF;
-        //     // delay(100);
-        //     // stop();
-        // }
-        // SCL = 0;
-
-
-        // stop();
-    
-
-
-
 }
 
