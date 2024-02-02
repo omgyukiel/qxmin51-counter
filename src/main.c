@@ -174,6 +174,11 @@ void main(void)
         // toggles between LED features
         if (K1 == 0) {
             delay(5);
+            //  for (int j = 50; j > 0; j--) {
+                P3_6 ^= 1;	
+                delay_led(100);
+                delay_led(100);
+            // }
             while(!K1) {
             }
             mode++;
@@ -183,6 +188,11 @@ void main(void)
             v = 0;
             count = 0;
             P1 = 0xFF;
+        }
+        if (K2 == 0) {
+            delay(5);
+            while(!K2) {
+            }
         }
         if (mode == SEG) {
             int t = 0; // var for button timer
