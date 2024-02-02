@@ -166,41 +166,6 @@ void lcd_write(char cmd)
     pcf_write_command(data_t, bytes); 
 }
 
-// void lcd_write(char cmd) 
-// {
-//     char upper, lower; // upper, lower nibbles
-//     uint8_t data_t[4];
-//     int bytes = 4;;
-//     upper = (cmd&0xf0) >> 4; // upper nibble
-//     lower = ( (cmd<<4) & 0xf0) >> 4; // lower nibble
-//     // strobe commands by togglign enable line, rs = 0 to signal a command
-//     data_t[0] = upper | 0xD0; // en = 1 , rs = 1
-//     data_t[1] = upper | 0x90; // en = 0 , rs = 1
-//     data_t[2] = lower | 0xD0; 
-//     data_t[3] = lower | 0x90; 
-//     pcf_write_command(data_t, bytes); 
-// }
-
-void lcd_clear (void)
-{
-	lcd_cmd (0x01);
-	delay(300);
-}
-
-void lcd_put_cur(int row, int col)
-{
-    switch (row)
-    {
-        case 0:
-            col |= 0x80;
-            break;
-        case 1:
-            col |= 0xC0;
-            break;
-    }
-
-    lcd_cmd (col);
-}
 
 void lcd_send_string (char *str)
 {
@@ -224,92 +189,41 @@ void lcd_init(void) {
 	// delay(600);
 
     // // dislay initialisation
-    	lcd_cmd (0x02); // Function set --> DL=0 (4 bit mode), N = 1 (2 line display) F = 0 (5x8 characters) //28 is old
-delay(55);
-	lcd_cmd (0x28); // Function set --> DL=0 (4 bit mode), N = 1 (2 line display) F = 0 (5x8 characters) //28 is old
-	delay(55);
-    lcd_cmd(0x0c); //Display on/off control --> D=0,C=0, B=0  ---> display off
-	// lcd_cmd(0x08); //Display on/off control --> D=0,C=0, B=0  ---> display off
-	delay(55);
-	lcd_cmd(0x06);  // clear display
-    	// lcd_cmd(0x06);  // clear display
 
-	delay(55);
-    	lcd_cmd(0x01);  // clear display
-
-	delay(55);
-	// lcd_cmd(0x06); //Entry mode set --> I/D = 1 (increment cursor) & S = 0 (no shift)
+    	// lcd_cmd(0x08); //Display on/off control --> D=0,C=0, B=0  ---> display off
+        // lcd_cmd(0x06); //Entry mode set --> I/D = 1 (increment cursor) & S = 0 (no shift)
 	// delay(55);
 	// lcd_cmd(0x0F); //Display on/off control --> D = 1, C and B = 0. (Cursor and brink, last two bits)
 	// delay(55);
     
 
+//     	lcd_cmd (0x02); // Function set --> DL=0 (4 bit mode), N = 1 (2 line display) F = 0 (5x8 characters) //28 is old
+// delay(55);
+// 	lcd_cmd (0x28); // Function set --> DL=0 (4 bit mode), N = 1 (2 line display) F = 0 (5x8 characters) //28 is old
+// 	delay(55);
+//     lcd_cmd(0x0c); //Display on/off control --> D=0,C=0, B=0  ---> display off
+// 	delay(55);
+// 	lcd_cmd(0x06);  // clear display
+//     	// lcd_cmd(0x06);  // clear display
+
+// 	delay(55);
+//     	lcd_cmd(0x01);  // clear display
+
+// 	delay(55);
+	
+
 }
 
 void main(void)  
 {  
-    // for (int j = 70; j > 0; j--) {
-    //     P3_6 ^= 1;	
-    //     delay(j);
-    //     delay(5);
-    // }
-
-    // for (int j = 20; j > 0; j--) {
-    //     for (int i = 50; i>0; i--) {
-    //         P3_6 ^= 1;
-    //         delay(j);
-    //     }
-    // }
-    // for (int j = 50; j > 0; j--) {
-    //     P3_6 ^= 1;	
-    //     delay(10);
-    // }
-    // for (int j = 50; j > 0; j--) {
-    //     P3_6 ^= 1;	
-    //     delay(5);
-    // }
-    lcd_init();
+    // lcd_init();
     delay(55);
-    lcd_cmd(0x80); // set cursor to start
-	delay(55);
-    // lcd_put_cur(0,0);
-    // lcd_write('B');
-    for (char i = 'A'; i <= 'P' ; i++) {
-        lcd_write(i);
-        delay(5000000);
-    }
-
-    lcd_cmd(0xC0); // set cursor to start
-    // for (char i = 'Q'; i <= 'Z' ; i++) {
-    //     lcd_write(i);
-    //     delay(500);
-    // }
-    // lcd_write('A');
-    // lcd_write('B');
-    // lcd_write('C');
-
+    lcd_cmd(0x02); 
     delay(55);
-    //  lcd_write('D');
-    // delay(55);
-    // uint8_t test 
-    // pcf_write_command(data_t, bytes); 
-    // lcd_cmd(0x02);
-    // lcd_put_cur(1,3);
-
-    // lcd_write('A');
-    // lcd_clear();
-    // delay(55);
-    // delay_led(1000);
-    // lcd_put_cur(1,3);
-    // delay(55);
-    // lcd_cmd(0x02);
-    // delay(55);
-    // delay(55);
-    // lcd_write("4");
-    lcd_send_string("Hello dudes");
-    lcd_send_string("Kenny is Great!");
-
-
+    lcd_send_string("Hello World");
+    lcd_cmd(0xc3);
+    lcd_send_string("Bob is Great!");
+    delay(55);
     while(1) {
 
     }
