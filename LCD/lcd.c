@@ -25,7 +25,7 @@ void cmdout(char cmd)
         else {
             SDA = 0;
         }
-        delay(10);
+        delay(1);
         SCL = 1;
         cmd = cmd << 1;  // clock data into sda
         SCL = 0;
@@ -79,7 +79,7 @@ void delay_led(unsigned int i)
 void wack(void) {
      // ACK from slave
         SCL = 1;
-        delay(50);
+        delay(1);
         if (SDA) {  // NACK
             P1 = 0x00;
             delay(100);
@@ -87,7 +87,7 @@ void wack(void) {
             // stop();
         } else { // SDA low is ACK
             P1 = 0xFF;
-            delay(100);
+            delay(1);
         }
         SCL = 0;
 }
@@ -115,11 +115,11 @@ void pcf_write_command(uint8_t *commands, int bytes)
 {
     start(); // start condition for i2c device;
     cmdout(0x7e); // set i2c at address 3f in write mode
-    delay(10);
+    delay(1);
     wack(); // receive ack/nack from slave
     for (int i = 0; i < bytes; i++) { // SEND all commands in array
         cmdout(commands[i]);
-        delay(10);
+        delay(1);
         wack(); // receive ack/nack from slave
     }
     stop(); // stop condition for i2c device;
@@ -143,10 +143,10 @@ void lcd_cmd(char cmd)
     upper = (cmd&0xf0); // upper nibble
     lower = ( (cmd<<4) & 0xf0); // lower nibble
     // strobe commands by togglign enable line, rs = 0 to signal a command
-    data_t[3] = upper | 0x0c; // en = 1 , rs = 0
-    data_t[2] = upper | 0x08; // en = 0 , rs = 0
-    data_t[1] = lower | 0x0c; 
-    data_t[0] = lower | 0x08;
+    data_t[0] = upper | 0x0c; // en = 1 , rs = 0
+    data_t[1] = upper | 0x08; // en = 0 , rs = 0
+    data_t[2] = lower | 0x0c; 
+    data_t[3] = lower | 0x08;
     pcf_write_command(data_t, bytes); 
 }
 
@@ -166,6 +166,20 @@ void lcd_write(char cmd)
     pcf_write_command(data_t, bytes); 
 }
 
+// void lcd_write(char cmd) 
+// {
+//     char upper, lower; // upper, lower nibbles
+//     uint8_t data_t[4];
+//     int bytes = 4;;
+//     upper = (cmd&0xf0) >> 4; // upper nibble
+//     lower = ( (cmd<<4) & 0xf0) >> 4; // lower nibble
+//     // strobe commands by togglign enable line, rs = 0 to signal a command
+//     data_t[0] = upper | 0xD0; // en = 1 , rs = 1
+//     data_t[1] = upper | 0x90; // en = 0 , rs = 1
+//     data_t[2] = lower | 0xD0; 
+//     data_t[3] = lower | 0x90; 
+//     pcf_write_command(data_t, bytes); 
+// }
 
 void lcd_clear (void)
 {
@@ -199,39 +213,90 @@ void lcd_init(void) {
     // https://controllerstech.com/i2c-in-esp32-esp-idf-lcd-1602/#info_box
     // note 1 byte = P7 P6 P5 P4 P3 P2 P1 P0  == D7 D6 D5 D4 LED E R/W RS
 
-    delay(2800); // delay >40ms
-    lcd_cmd(0x30);
-    delay(300); // >4.1ms
-    lcd_cmd(0x30);
-	delay(15);  // >100us
-    lcd_cmd(0x30);
-	delay(600);
-    lcd_cmd(0x20); // 4 bit mode
-	delay(600);
+    // delay(2300); // delay >40ms
+    // lcd_cmd(0x30);
+    // delay(600); // >4.1msd
+    // lcd_cmd(0x30);
+	// delay(5);  // >100us
+    // lcd_cmd(0x30);
+	// delay(600);
+    // lcd_cmd(0x20); // 4 bit mode
+	// delay(600);
 
-    // dislay initialisation
+    // // dislay initialisation
+    	lcd_cmd (0x02); // Function set --> DL=0 (4 bit mode), N = 1 (2 line display) F = 0 (5x8 characters) //28 is old
+delay(55);
 	lcd_cmd (0x28); // Function set --> DL=0 (4 bit mode), N = 1 (2 line display) F = 0 (5x8 characters) //28 is old
-	delay(60);
-	lcd_cmd(0x08); //Display on/off control --> D=0,C=0, B=0  ---> display off
-	delay(60);
-	lcd_cmd(0x01);  // clear display
-	delay(60);
-	delay(60);
-	lcd_cmd(0x06); //Entry mode set --> I/D = 1 (increment cursor) & S = 0 (no shift)
-	delay(60);
-	lcd_cmd(0x0C); //Display on/off control --> D = 1, C and B = 0. (Cursor and blink, last two bits)
-	delay(60);
+	delay(55);
+    lcd_cmd(0x0c); //Display on/off control --> D=0,C=0, B=0  ---> display off
+	// lcd_cmd(0x08); //Display on/off control --> D=0,C=0, B=0  ---> display off
+	delay(55);
+	lcd_cmd(0x06);  // clear display
+    	// lcd_cmd(0x06);  // clear display
+
+	delay(55);
+    	lcd_cmd(0x01);  // clear display
+
+	delay(55);
+	// lcd_cmd(0x06); //Entry mode set --> I/D = 1 (increment cursor) & S = 0 (no shift)
+	// delay(55);
+	// lcd_cmd(0x0F); //Display on/off control --> D = 1, C and B = 0. (Cursor and brink, last two bits)
+	// delay(55);
+    
+
 }
 
 void main(void)  
 {  
-    delay(1000);
+    // for (int j = 70; j > 0; j--) {
+    //     P3_6 ^= 1;	
+    //     delay(j);
+    //     delay(5);
+    // }
+
+    // for (int j = 20; j > 0; j--) {
+    //     for (int i = 50; i>0; i--) {
+    //         P3_6 ^= 1;
+    //         delay(j);
+    //     }
+    // }
+    // for (int j = 50; j > 0; j--) {
+    //     P3_6 ^= 1;	
+    //     delay(10);
+    // }
+    // for (int j = 50; j > 0; j--) {
+    //     P3_6 ^= 1;	
+    //     delay(5);
+    // }
     lcd_init();
-    delay(1000);
-    lcd_cmd(0x02);
+    delay(55);
+    lcd_cmd(0x80); // set cursor to start
+	delay(55);
+    // lcd_put_cur(0,0);
+    // lcd_write('B');
+    for (char i = 'A'; i <= 'P' ; i++) {
+        lcd_write(i);
+        delay(5000000);
+    }
+
+    lcd_cmd(0xC0); // set cursor to start
+    // for (char i = 'Q'; i <= 'Z' ; i++) {
+    //     lcd_write(i);
+    //     delay(500);
+    // }
+    // lcd_write('A');
+    // lcd_write('B');
+    // lcd_write('C');
+
+    delay(55);
+    //  lcd_write('D');
+    // delay(55);
+    // uint8_t test 
+    // pcf_write_command(data_t, bytes); 
+    // lcd_cmd(0x02);
     // lcd_put_cur(1,3);
 
-    lcd_write('A');
+    // lcd_write('A');
     // lcd_clear();
     // delay(55);
     // delay_led(1000);
@@ -241,8 +306,8 @@ void main(void)
     // delay(55);
     // delay(55);
     // lcd_write("4");
-    // lcd_send_string("Hello dudes");
-    // lcd_send_string("Kenny is Great!");
+    lcd_send_string("Hello dudes");
+    lcd_send_string("Kenny is Great!");
 
 
     while(1) {
