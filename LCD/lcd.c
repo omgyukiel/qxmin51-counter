@@ -1,5 +1,8 @@
 #include <8051.h>
 #include <stdint.h>
+#include "i2c.h"
+#include "periphs.h"
+#include "constants.h"
 #define SDA P0_0
 #define SCL P0_1
 #define INT P0_2
@@ -65,14 +68,6 @@ void stop(void) {
     delay(1);
     SCL = 1;
     SDA = 1;
-}
-
-void delay_led(unsigned int i)
-{
-	unsigned char j;
-
-	for (; i > 0; i--)
-		for (j = 255; j > 0; j--);
 }
 
 // ack from slave
