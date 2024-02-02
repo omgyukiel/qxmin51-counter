@@ -81,13 +81,12 @@ void wack(void) {
         SCL = 1;
         delay(1);
         if (SDA) {  // NACK
-            P1 = 0x00;
-            delay(100);
-            P1 = 0xFF;
-            // stop();
+            // P1 = 0x00;
+            // delay(100);
+            // P1 = 0xFF;
         } else { // SDA low is ACK
-            P1 = 0xFF;
-            delay(1);
+            // P1 = 0xFF;
+            // delay(1);
         }
         SCL = 0;
 }
@@ -98,21 +97,11 @@ void rack(unsigned char valid) {
         delay(1);
         SCL = 1;
         delay(10);
-        // if (SDA) {  // NACK
-        //     P1 = 0x00;
-        //     delay(100);
-        //     P1 = 0xFF;
-        //     // stop();
-        // } else { // SDA low is ACK
-        //     P1 = 0xFF;
-        //     delay(100);
-        // }
         SCL = 0;
 }
 
 // write bytes amount of commands to i2c
-void pcf_write_command(uint8_t *commands, int bytes) 
-{
+void pcf_write_command(uint8_t *commands, int bytes) {
     start(); // start condition for i2c device;
     cmdout(0x7e); // set i2c at address 3f in write mode
     delay(1);
@@ -166,13 +155,32 @@ void lcd_write(char cmd)
     pcf_write_command(data_t, bytes); 
 }
 
-
 void lcd_send_string (char *str)
 {
 	while (*str) lcd_write (*str++);
 }
 
-void lcd_init(void) {
+void main(void)  
+{  
+    // lcd_init();
+    delay(55);
+    lcd_cmd(0x02); 
+    delay(55);
+    lcd_send_string("Hello World");
+    delay(55);
+    lcd_cmd(0xc3);
+    delay(55);
+    lcd_send_string("Bob is Great!");
+    delay(55);
+    while(1) {
+
+    }
+
+}
+
+
+void lcd_init(void) 
+{
     // initializes 4 bit mode
     // init source is in espi2clcd_2.jpeg within resources
     // https://controllerstech.com/i2c-in-esp32-esp-idf-lcd-1602/#info_box
@@ -210,23 +218,6 @@ void lcd_init(void) {
 //     	lcd_cmd(0x01);  // clear display
 
 // 	delay(55);
-	
-
-}
-
-void main(void)  
-{  
-    // lcd_init();
-    delay(55);
-    lcd_cmd(0x02); 
-    delay(55);
-    lcd_send_string("Hello World");
-    lcd_cmd(0xc3);
-    lcd_send_string("Bob is Great!");
-    delay(55);
-    while(1) {
-
-    }
 
 }
 
