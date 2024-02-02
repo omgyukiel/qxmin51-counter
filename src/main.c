@@ -14,16 +14,6 @@
 #include <stdbool.h>
 #include <math.h>
 #include <stdint.h>
-
-
-
-
-// 0 bit means that segment is on
-// dictionary for digits 0-9 on the 7-segment display
-__code unsigned char table[] = { 0xc0, 0xf9, 0xa4, 0xb0, 0x99, 0x92, 0x82,
-	0xf8, 0x80, 0x90
-};
-
 // K1 - K4 are keys S1-S4 respectively
 #define	K4	P3_2
 #define	K3	P3_3
@@ -41,10 +31,16 @@ __code unsigned char table[] = { 0xc0, 0xf9, 0xa4, 0xb0, 0x99, 0x92, 0x82,
 #define MSK 0x80
 #define ACK 0
 #define NACK 1
+// 0 bit means that segment is on
+// dictionary for digits 0-9 on the 7-segment display
+__code unsigned char table[] = { 0xc0, 0xf9, 0xa4, 0xb0, 0x99, 0x92, 0x82,
+	0xf8, 0x80, 0x90
+};
 
 
 
-// // program a delay between operations
+
+// program a delay between operations
 void delay_led(unsigned int i)
 {
 	unsigned char j;
@@ -53,7 +49,7 @@ void delay_led(unsigned int i)
 		for (j = 255; j > 0; j--);
 }
 
-// // source: https://github.com/retiredfeline/QX-mini51-SDCC
+// source: https://github.com/retiredfeline/QX-mini51-SDCC
 // delay for 18  µs
 void delay(unsigned int t)
 {
@@ -128,12 +124,9 @@ void wack(void) {
         SCL = 1;
         delay(1);
         if (SDA) {  // NACK
-            // P1 = 0x00;
-            // delay(100);
-            // P1 = 0xFF;
+        // do something
         } else { // SDA low is ACK
-            // P1 = 0xFF;
-            // delay(1);
+        // do something
         }
         SCL = 0;
 }
@@ -155,11 +148,10 @@ void pcf_write_command(uint8_t *commands, int bytes) {
    lower nibbles are backlight, enable, r/w, register select for p3 p2 p1 p0 respectively (bits 3 2 1 0)
    register select is high when writing to the lcd, low when sending a command
    commands must be clocked or "strobed" by setting the enable line off and off,so each command is sent twice to the lcd
-   r/w is only set high when reading from lcd */
-
-
-//sends command to lcd through i2c 
-// note 1 byte = P7 P6 P5 P4 P3 P2 P1 P0  == D7 D6 D5 D4 LED E R/W RS
+   r/w is only set high when reading from lcd 
+   note 1 byte = P7 P6 P5 P4 P3 P2 P1 P0  == D7 D6 D5 D4 LED E R/W RS
+   */
+// sends command to lcd through i2c 
 void lcd_cmd(char cmd) 
 {
     char upper, lower; // upper, lower nibbles
@@ -236,9 +228,6 @@ void main(void)
     int mode = SEG;
     int count = 0; // counter for LEDs
     bool left = true;
-
-    
-
 	while (1) {
         // holds binary representation of button presses
         unsigned char pos = 0;
@@ -249,13 +238,9 @@ void main(void)
         SCL = 1;
         delay(1);
         if (SDA) {  // NACK
-            // P1 = 0xFF;
-            // delay(10);
-            // stop();
+            // do something
         } else { // ACK
-            // P1 = 0x00;
-            // delay(10);
-            // stop();
+            // do something
         }
         SCL = 0;
 
@@ -265,14 +250,11 @@ void main(void)
             SCL = 1;
             delay(1);
             if (SDA) { // default i2c is active low
-                // P1 = ~i; // 1;
+                // do something
             }
             else {
                 pos |= (1<<i); // bit pos mask
-                // P1 = ~pos;
-                // delay(100);
-                // P1 = 0xFF;
-
+                // do something
             }
             delay(10);
         }
@@ -293,14 +275,9 @@ void main(void)
         SCL = 1;
         delay(1);
         if (SDA) {  // NACK
-            // P1 = 0x00;
-            // delay(100);
-            // P1 = 0xFF;
-            // stop();
+            // do something
         } else { // SDA low is ACK
-            // P1 = 0xFF;
-            // delay(100);
-            // stop();
+            // do something
         }
         SCL = 0;
 
@@ -310,31 +287,19 @@ void main(void)
         SCL = 1;
         delay(1);
         if (SDA) {  // NACK
-            // P1 = 0X00;
-            // delay(100);
-            // P1 = 0xFF;
-            // delay(100);
-            // stop();
+            // do something
         } else { // SDA low is ACK
-            // P1 = 0xFF;
-            // delay(100);
-            // stop();
+            // do something
         }
         SCL = 0;
-
-        // cmdout(~bitpos);
         cmdout(~pos); // p10-p17
         // ACK from slave
         SCL = 1;
         delay(1);
         if (SDA) {  // NACK
-            // P1 = 0x00;
-            // delay(10);
-            // stop();
+            // do something
         } else { // SDA low is ACK
-            // P1 = 0xFF;
-            // delay(100);
-            // stop();
+            // do something
         }
         SCL = 0;
         stop();
@@ -413,11 +378,9 @@ void main(void)
             if (count == 6) {
                 count = 0;
             }
-            // for (int i = 0; i < 6; i++) {
             P1 = ~(3<<count | 192>>count);
             count++;
             delay_led(100);
-            // }
         }
 	}
 }
