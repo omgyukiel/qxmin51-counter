@@ -1,4 +1,6 @@
-// https://wiki.laptop.org/go/SDCC#Compiling_a_program
+A foray into embedded systems
+
+https://wiki.laptop.org/go/SDCC#Compiling_a_program
 Steps:
 Compile C files using sdcc
 
